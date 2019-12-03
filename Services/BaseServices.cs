@@ -6,44 +6,85 @@ using System.Threading.Tasks;
 using IServices;
 using Model;
 using SqlSugar;
+using IRepository;
 
 namespace Services
 {
     public class BaseServices<TEntity> : IBaseServices<TEntity> where TEntity : class, new()
     {
-        public Task<ReturnModel> BatchSaveEntityInfo(List<TEntity> entities, BatchSave batchSave = BatchSave.BatchAdd)
+        public IBaseRepository<TEntity> baseRepository;
+
+        /// <summary>
+        /// 批量操作数据实体
+        /// </summary>
+        /// <param name="entities">数据实体</param>
+        /// <param name="batchSave">操作类型</param>
+        /// <returns></returns>
+        public async Task<ReturnModel> BatchSaveEntityInfo(List<TEntity> entities, BatchSave batchSave = BatchSave.BatchAdd)
         {
-            throw new NotImplementedException();
+            return await baseRepository.BatchSaveEntityInfo(entities, batchSave);
         }
 
-        public Task<ReturnModel> DeleteTEntityById(object Id)
+        /// <summary>
+        /// 根据 主键ID 删除实体数据
+        /// </summary>
+        /// <param name="Id">主键ID</param>
+        /// <returns></returns>
+        public async Task<ReturnModel> DeleteTEntityById(object Id)
         {
-            throw new NotImplementedException();
+            return await baseRepository.DeleteTEntityById(Id);
         }
 
-        public Task<object> ExecSqlText(string sqlStr, Option option, params SugarParameter[] paras)
+        /// <summary>
+        /// 执行SQL语句
+        /// </summary>
+        /// <param name="sqlStr">SQL语句</param>
+        /// <param name="option">操作类型</param>
+        /// <param name="paras">参数</param>
+        /// <returns></returns>
+        public async Task<object> ExecSqlText(string sqlStr, Option option, params SugarParameter[] paras)
         {
-            throw new NotImplementedException();
+            return await baseRepository.ExecSqlText(sqlStr, option, paras);
         }
 
-        public Task<DataTable> ExecStoredProcedure(string procName, Model.PageModel pm)
+        /// <summary>
+        /// 执行查询存储过程
+        /// </summary>
+        /// <param name="procName">存储过程名称</param>
+        /// <param name="pm">参数</param>
+        /// <returns></returns>
+        public async Task<DataTable> ExecStoredProcedure(string procName, Model.PageModel pm)
         {
-            throw new NotImplementedException();
+            return await baseRepository.ExecStoredProcedure(procName, pm);
         }
 
-        public Task<List<TEntity>> GetEntity()
+        /// <summary>
+        /// 获取实体列表（不分页）
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<TEntity>> GetEntity()
         {
-            throw new NotImplementedException();
+            return await baseRepository.GetEntity();
         }
 
-        public Task<List<TEntity>> GetEntityPage(Model.PageModel pm)
+        /// <summary>
+        /// 获取实体列表（分页），本质为执行存储过程
+        /// </summary>
+        /// <param name="pm">参数</param>
+        /// <returns></returns>
+        public async Task<List<TEntity>> GetEntityPage(Model.PageModel pm)
         {
-            throw new NotImplementedException();
+            return await baseRepository.GetEntityPage(pm);
         }
 
-        public Task<ReturnModel> SaveEntityInfo(TEntity entity)
+        /// <summary>
+        /// 保存、更改、逻辑删除实体数据
+        /// </summary>
+        /// <param name="entity">实体数据</param>
+        /// <returns></returns>
+        public async Task<ReturnModel> SaveEntityInfo(TEntity entity)
         {
-            throw new NotImplementedException();
+            return await baseRepository.SaveEntityInfo(entity);
         }
     }
 }
