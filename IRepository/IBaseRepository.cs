@@ -38,7 +38,7 @@ namespace IRepository
         Task<ReturnModel> DeleteTEntityById(object Id);
 
         /// <summary>
-        /// 执行存储过程
+        /// 执行查询存储过程
         /// </summary>
         /// <param name="procName"></param>
         /// <param name="pm"></param>

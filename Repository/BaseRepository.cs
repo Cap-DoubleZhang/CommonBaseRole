@@ -112,7 +112,7 @@ namespace Repository
         }
 
         /// <summary>
-        /// 执行存储过程
+        /// 执行查询存储过程
         /// </summary>
         /// <param name="procName"></param>
         /// <param name="pm"></param>
@@ -171,7 +171,7 @@ namespace Repository
         }
 
         /// <summary>
-        /// 保存、添加、逻辑删除实体数据
+        /// 保存、添加、逻辑删除单个实体数据
         /// </summary>
         /// <param name="entity">实体数据</param>
         /// <returns></returns>
