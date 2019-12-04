@@ -41,9 +41,17 @@ namespace CommonBaseRole
 
             //注册要通过反射创建的组件
             var serviceDllFile = Path.Combine(basePath, "Services.dll");
-            var assemblysServices = Assembly.LoadFrom(serviceDllFile);
+            var assemblysServices = Assembly.LoadFile(serviceDllFile);
 
             builder.RegisterAssemblyTypes(assemblysServices)
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope()
+                .EnableInterfaceInterceptors();
+
+            var repositoryDllFile = Path.Combine(basePath, "Repository.dll");
+            var assemblysRepository = Assembly.LoadFile(repositoryDllFile);
+
+            builder.RegisterAssemblyTypes(assemblysRepository)
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope()
                 .EnableInterfaceInterceptors();

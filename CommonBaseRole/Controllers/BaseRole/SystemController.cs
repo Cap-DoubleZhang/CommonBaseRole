@@ -28,7 +28,12 @@ namespace CommonBaseRole.Controllers.BaseRole
         public async Task<ActionResult> GetMenuList()
         {
             List<AdminModule> list = await adminModuleService.GetEntity();
-            return Ok();
+            return Ok(new
+            {
+                success = true,
+                code = 0000,
+                data = list,
+            });
         }
     }
 }
