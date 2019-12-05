@@ -13,27 +13,124 @@ namespace CommonBaseRole.Controllers.BaseRole
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SystemController : ControllerBase
+    public class SystemController : CommonController
     {
-        private IAdminModuleService adminModuleService;
+        private IAdminModuleService AdminModuleService;
+        private ISystemRoleService SystemRoleService;
         private ILogger<SystemController> _logger;
 
-        public SystemController(ILogger<SystemController> logger, IAdminModuleService adminModuleService)
+        public SystemController(ILogger<SystemController> logger, IAdminModuleService adminModuleService
+            , ISystemRoleService systemRoleService)
         {
-            this.adminModuleService = adminModuleService;
+            this.AdminModuleService = adminModuleService;
+            this.SystemRoleService = systemRoleService;
             this._logger = logger;
         }
 
-        [HttpGet("/Menus")]
-        public async Task<ActionResult> GetMenuList()
+        /// <summary>
+        /// 获取后台菜单全部数据（不分页）
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Menus")]
+        public async Task<object> GetMenuList()
         {
-            List<AdminModule> list = await adminModuleService.GetEntity();
-            return Ok(new
+            JsonpResult<object> json = GetErrorJSONP("初始化中...");
+            try
             {
-                success = true,
-                code = 0000,
-                data = list,
-            });
+                List<AdminModule> list = await AdminModuleService.GetEntity();
+                var getval = new
+                {
+                    success = true,
+                    data = list,
+                };
+                json = new JsonpResult<object>(getval);
+            }
+            catch (Exception ex)
+            {
+                json = GetErrorJSONP(ex.Message);
+            }
+            return Ok(json);
+        }
+
+        /// <summary>
+        /// 获取角色列表（分页）
+        /// </summary>
+        /// <param name="p">当前页</param>
+        /// <param name="s">每页展示</param>
+        /// <param name="keyword">关键词</param>
+        /// <returns></returns>
+        [HttpGet("Roles")]
+        public async Task<object> GetRoleList(int p = 1, int s = 1, string keyword = "")
+        {
+            JsonpResult<object> json = GetErrorJSONP("初始化中...");
+            try
+            {
+                PageModel pm = new PageModel { CurrentPage = p, PageSize = s };
+                if (!string.IsNullOrWhiteSpace(keyword))
+                {
+                    pm.OrCondition.Add(new SearchCondition()
+                    {
+                        ConditionField = "RoleName",
+                        SearchType = SearchType.Like,
+                        ConditionValue1 = keyword,
+                    });
+                    pm.OrCondition.Add(new SearchCondition()
+                    {
+                        ConditionField = "RoleDesc",
+                        SearchType = SearchType.Like,
+                        ConditionValue1 = keyword,
+                    });
+                }
+                pm.TableName = "SystemRole";
+                pm.KeyField = "RoleID";
+                List<SystemRole> list = await SystemRoleService.GetEntityPage(pm);
+                var getval = new
+                {
+                    success = true,
+                    data = list,
+                    pageSize = s,
+                    page = p,
+                    maxPage = pm.MaxPage,
+                    dataCount = pm.DataCount,
+                };
+                json = new JsonpResult<object>(getval);
+            }
+            catch (Exception ex)
+            {
+                json = GetErrorJSONP(ex.Message);
+            }
+            return Ok(json);
+        }
+
+        /// <summary>
+        /// 获取角色详情
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        [HttpGet("Roles/{Id}")]
+        public async Task<object> GetSystemRoleInfo(int Id = 0)
+        {
+            JsonpResult<object> json = GetErrorJSONP("初始化中...");
+            try
+            {
+                if (Id == 0)
+                {
+                    json = GetErrorJSONP("必要参数传入错误");
+                    return BadRequest(json);
+                }
+                SystemRole roleInfo = await SystemRoleService.TEntityInfo(Id);
+                var getval = new
+                {
+                    success = true,
+                    item = roleInfo,
+                };
+                json = new JsonpResult<object>(getval);
+            }
+            catch (Exception ex)
+            {
+                json = GetErrorJSONP(ex.Message);
+            }
+            return Ok(json);
         }
     }
 }

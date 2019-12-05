@@ -36,6 +36,16 @@ namespace Services
         }
 
         /// <summary>
+        /// 获取实体详情
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public async Task<TEntity> TEntityInfo(int Id)
+        {
+            return await baseRepository.TEntityInfo(Id);
+        }
+
+        /// <summary>
         /// 执行SQL语句
         /// </summary>
         /// <param name="sqlStr">SQL语句</param>

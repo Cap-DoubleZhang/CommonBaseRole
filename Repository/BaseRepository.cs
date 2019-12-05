@@ -191,5 +191,20 @@ namespace Repository
             }
             return await Task.Run(() => rm);
         }
+
+        /// <summary>
+        /// 获取实体详情
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public async Task<TEntity> TEntityInfo(int Id)
+        {
+            TEntity entity = db.Queryable<TEntity>().InSingle(Id);
+            if (entity == null)
+            {
+                entity = new TEntity();
+            }
+            return await Task.Run(() => entity);
+        }
     }
 }

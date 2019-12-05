@@ -20,10 +20,5 @@ namespace Services.BaseRole
             this._repository = adminModuleRepository;
             base.baseRepository = adminModuleRepository;
         }
-
-        //public async Task<List<AdminModule>> GetAdminModuleList()
-        //{
-        //    return await 
-        //}
     }
 }
