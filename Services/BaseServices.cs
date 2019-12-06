@@ -20,7 +20,7 @@ namespace Services
         /// <param name="entities">数据实体</param>
         /// <param name="batchSave">操作类型</param>
         /// <returns></returns>
-        public async Task<ReturnModel> BatchSaveEntityInfo(List<TEntity> entities, BatchSave batchSave = BatchSave.BatchAdd)
+        public async Task<ReturnModel> BatchSaveEntityInfo(List<TEntity> entities, BatchOption batchSave = BatchOption.BatchAdd)
         {
             return await baseRepository.BatchSaveEntityInfo(entities, batchSave);
         }
@@ -38,9 +38,9 @@ namespace Services
         /// <summary>
         /// 获取实体详情
         /// </summary>
-        /// <param name="Id"></param>
+        /// <param name="Id">主键ID</param>
         /// <returns></returns>
-        public async Task<TEntity> TEntityInfo(int Id)
+        public async Task<TEntity> TEntityInfo(string Id)
         {
             return await baseRepository.TEntityInfo(Id);
         }

@@ -11,6 +11,12 @@ namespace CommonBaseRole.Controllers
     [ApiController]
     public class CommonController : ControllerBase
     {
+        /// <summary>
+        /// 接口处返回错误信息
+        /// </summary>
+        /// <param name="message">错误提示</param>
+        /// <returns></returns>
+        [ApiExplorerSettings(IgnoreApi = true)]
         public JsonpResult<object> GetErrorJSONP(string message)
         {
             var getval = new

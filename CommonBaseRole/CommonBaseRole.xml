@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CommonBaseRole</name>
+    </assembly>
+    <members>
+        <member name="M:CommonBaseRole.Controllers.BaseRole.SystemController.GetMenuList">
+            <summary>
+            获取后台菜单全部数据（不分页）
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CommonBaseRole.Controllers.BaseRole.SystemController.GetRoleList(System.Int32,System.Int32,System.String)">
+            <summary>
+            获取角色列表（分页）
+            </summary>
+            <param name="p">当前页</param>
+            <param name="s">每页展示</param>
+            <param name="keyword">关键词</param>
+            <returns></returns>
+        </member>
+        <member name="M:CommonBaseRole.Controllers.BaseRole.SystemController.GetSystemRoleInfo(System.Int32)">
+            <summary>
+            获取角色详情
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CommonBaseRole.Controllers.CommonController.GetErrorJSONP(System.String)">
+            <summary>
+            接口处返回错误信息
+            </summary>
+            <param name="message">错误提示</param>
+            <returns></returns>
+        </member>
+        <member name="M:CommonBaseRole.Controllers.CommonController.JsonpResult`1.#ctor(`0)">
+            <summary>
+            前端返回数据类型
+            </summary>
+            <param name="obj"></param>
+        </member>
+        <member name="M:CommonBaseRole.Startup.ConfigureContainer(Autofac.ContainerBuilder)">
+            <summary>
+            使用Autofac注入配置
+            </summary>
+            <param name="builder"></param>
+        </member>
+    </members>
+</doc>

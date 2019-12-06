@@ -60,13 +60,13 @@ namespace IRepository
         /// <param name="entities">实体详情</param>
         /// <param name="batchSave">编辑类型</param>
         /// <returns></returns>
-        Task<ReturnModel> BatchSaveEntityInfo(List<TEntity> entities, BatchSave batchSave = 0);
+        Task<ReturnModel> BatchSaveEntityInfo(List<TEntity> entities, BatchOption batchSave = 0);
 
         /// <summary>
         /// 获取实体详情
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        Task<TEntity> TEntityInfo(int Id);
+        Task<TEntity> TEntityInfo(string Id);
     }
 }

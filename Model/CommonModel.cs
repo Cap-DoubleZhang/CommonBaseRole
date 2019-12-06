@@ -653,9 +653,9 @@ namespace Model
     }
 
     /// <summary>
-    /// 批量保存操作
+    /// 批量数据库操作
     /// </summary>
-    public enum BatchSave
+    public enum BatchOption
     {
         BatchAdd = 0,//批量添加
         BatchUpdate = 1,//批量更新

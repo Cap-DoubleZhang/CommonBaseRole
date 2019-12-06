@@ -14,6 +14,8 @@ using Autofac;
 using System.IO;
 using System.Reflection;
 using Autofac.Extras.DynamicProxy;
+using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
 
 namespace CommonBaseRole
 {
@@ -30,8 +32,32 @@ namespace CommonBaseRole
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            #region Swagger
+            var basePath = Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment.ApplicationBasePath;
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo()
+                {
+                    Version = "v1",
+                    Title = "CommonBaseRole API",
+                    Description = "项目接口说明书",
+                    Contact = new OpenApiContact { },
+                    License = new OpenApiLicense { },
+                });
+                c.OrderActionsBy(o => o.RelativePath);
+
+                var xmlPath = Path.Combine(basePath, "CommonBaseRole.xml");
+                c.IncludeXmlComments(xmlPath, true);//默认第二个参数为False，这个是controller的注释
+            });
+            #endregion
         }
 
+        #region Autofac
+        /// <summary>
+        /// 使用Autofac注入配置
+        /// </summary>
+        /// <param name="builder"></param>
         public void ConfigureContainer(ContainerBuilder builder)
         {
             //直接注册某一个类和接口
@@ -56,6 +82,7 @@ namespace CommonBaseRole
                 .InstancePerLifetimeScope()
                 .EnableInterfaceInterceptors();
         }
+        #endregion
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -63,7 +90,18 @@ namespace CommonBaseRole
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                #region Swagger
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint($"/swagger/v1/swagger.json", ".NET Core 3.0 V1");
+                });
+                #endregion
             }
+
+
+            app.UseStatusCodePages();//把错误码返回到前台
 
             app.UseRouting();
 

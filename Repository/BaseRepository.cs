@@ -31,26 +31,26 @@ namespace Repository
         /// <param name="entities"></param>
         /// <param name="batchSave"></param>
         /// <returns></returns>
-        public async Task<ReturnModel> BatchSaveEntityInfo(List<TEntity> entities, BatchSave batchSave = BatchSave.BatchAdd)
+        public async Task<ReturnModel> BatchSaveEntityInfo(List<TEntity> entities, BatchOption batchSave = BatchOption.BatchAdd)
         {
             ReturnModel rm = new ReturnModel();
             try
             {
                 switch (batchSave)
                 {
-                    case BatchSave.BatchAdd:
+                    case BatchOption.BatchAdd:
                         db.Insertable(entities.ToArray()).ExecuteCommand();
                         rm.msg = "批量保存成功!";
                         break;
-                    case BatchSave.BatchUpdate:
+                    case BatchOption.BatchUpdate:
                         db.Updateable(entities).ExecuteCommand();
                         rm.msg = "批量更新成功!";
                         break;
-                    case BatchSave.BatchLogicDelete:
+                    case BatchOption.BatchLogicDelete:
                         db.Updateable(entities).ExecuteCommand();
                         rm.msg = "批量删除成功!";
                         break;
-                    case BatchSave.BatchPhysicsDelete:
+                    case BatchOption.BatchPhysicsDelete:
                         db.Deleteable<TEntity>().In(entities).ExecuteCommand();
                         rm.msg = "批量删除成功!";
                         break;
@@ -195,16 +195,12 @@ namespace Repository
         /// <summary>
         /// 获取实体详情
         /// </summary>
-        /// <param name="Id"></param>
+        /// <param name="Id">主键ID</param>
         /// <returns></returns>
-        public async Task<TEntity> TEntityInfo(int Id)
+        public async Task<TEntity> TEntityInfo(string Id)
         {
             TEntity entity = db.Queryable<TEntity>().InSingle(Id);
-            if (entity == null)
-            {
-                entity = new TEntity();
-            }
-            return await Task.Run(() => entity);
+            return await Task.Run(() => entity ?? new TEntity());
         }
     }
 }

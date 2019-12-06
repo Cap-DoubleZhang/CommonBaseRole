@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DtoModel\BaseRole\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="sqlSugarCore" Version="5.0.0.10" />
   </ItemGroup>
 

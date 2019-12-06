@@ -10,13 +10,13 @@ namespace IServices
     public interface IBaseServices<TEntity> where TEntity : class
     {
         /// <summary>
-        /// 获取单个实体（不分页）
+        /// 获取实体列表（不分页）
         /// </summary>
         /// <returns></returns>
         Task<List<TEntity>> GetEntity();
 
         /// <summary>
-        /// 获取单个实体（分页）
+        /// 获取实体列表（分页）
         /// </summary>
         /// <returns></returns>
         Task<List<TEntity>> GetEntityPage(Model.PageModel pm);
@@ -36,7 +36,7 @@ namespace IServices
         Task<ReturnModel> DeleteTEntityById(object Id);
 
         /// <summary>
-        /// 执行存储过程
+        /// 执行查询存储过程（以后可更改执行增删改查存储过程）
         /// </summary>
         /// <param name="procName"></param>
         /// <param name="pm"></param>
@@ -58,13 +58,13 @@ namespace IServices
         /// <param name="entities">实体详情</param>
         /// <param name="batchSave">编辑类型</param>
         /// <returns></returns>
-        Task<ReturnModel> BatchSaveEntityInfo(List<TEntity> entities, BatchSave batchSave = 0);
+        Task<ReturnModel> BatchSaveEntityInfo(List<TEntity> entities, BatchOption batchSave = 0);
 
         /// <summary>
-        /// 获取实体详情
+        /// 根据主键获取实体详情
         /// </summary>
-        /// <param name="Id"></param>
+        /// <param name="Id">主键ID</param>
         /// <returns></returns>
-        Task<TEntity> TEntityInfo(int Id);
+        Task<TEntity> TEntityInfo(string Id);
     }
 }

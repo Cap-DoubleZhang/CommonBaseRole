@@ -8,6 +8,7 @@ using Model.EntityModel.BaseRole;
 using Model;
 using IServices.BaseRole;
 using Microsoft.Extensions.Logging;
+using Model.DtoModel.BaseRole;
 
 namespace CommonBaseRole.Controllers.BaseRole
 {
@@ -84,6 +85,7 @@ namespace CommonBaseRole.Controllers.BaseRole
                 pm.TableName = "SystemRole";
                 pm.KeyField = "RoleID";
                 List<SystemRole> list = await SystemRoleService.GetEntityPage(pm);
+                
                 var getval = new
                 {
                     success = true,
@@ -118,7 +120,7 @@ namespace CommonBaseRole.Controllers.BaseRole
                     json = GetErrorJSONP("必要参数传入错误");
                     return BadRequest(json);
                 }
-                SystemRole roleInfo = await SystemRoleService.TEntityInfo(Id);
+                SystemRole roleInfo = await SystemRoleService.TEntityInfo(Id.ToString());
                 var getval = new
                 {
                     success = true,
