@@ -9,6 +9,6 @@ namespace IServices.BaseRole
 {
     public interface IAdminModuleService : IBaseServices<AdminModule>
     {
-        //Task<List<AdminModule>> GetAdminModuleList();
+
     }
 }

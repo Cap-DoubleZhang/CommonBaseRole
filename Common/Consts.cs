@@ -10,11 +10,16 @@
         /// <summary>
         /// 密码加密方式
         /// </summary>
-        public static string EncryptType = CommonHelper.app(new string[] { "PasswordSetting", "EncryptType" });
+        public static string EncryptType = CommonHelper.app(new string[] { "AppSetting", "PasswordSetting", "EncryptType" });
+
+        /// <summary>
+        /// 密码截取开始索引
+        /// </summary>
+        public static string SubStart = CommonHelper.app(new string[] { "AppSetting", "PasswordSetting", "SubStart" });
 
         /// <summary>
         /// 密码截取位数
         /// </summary>
-        public static string SubString = CommonHelper.app(new string[] { "PasswordSetting", "SubString" });
+        public static string SubString = CommonHelper.app(new string[] { "AppSetting", "PasswordSetting", "SubString" });
     }
 }

@@ -9,7 +9,6 @@ namespace Model.DtoModel.BaseRole
         public SystemRoleDto()
         {
             IsUse = 1;
-            LastUpdateTime = DateTime.Now;
         }
         /// <summary>
         /// 角色ID

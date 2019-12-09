@@ -9,6 +9,7 @@ using Model;
 using IServices.BaseRole;
 using Microsoft.Extensions.Logging;
 using Model.DtoModel.BaseRole;
+using Common;
 
 namespace CommonBaseRole.Controllers.BaseRole
 {
@@ -18,13 +19,15 @@ namespace CommonBaseRole.Controllers.BaseRole
     {
         private IAdminModuleService AdminModuleService;
         private ISystemRoleService SystemRoleService;
+        private ISystemUserService SystemUserService;
         private ILogger<SystemController> _logger;
 
         public SystemController(ILogger<SystemController> logger, IAdminModuleService adminModuleService
-            , ISystemRoleService systemRoleService)
+            , ISystemRoleService systemRoleService, ISystemUserService systemUserService)
         {
             this.AdminModuleService = adminModuleService;
             this.SystemRoleService = systemRoleService;
+            this.SystemUserService = systemUserService;
             this._logger = logger;
         }
 
@@ -85,7 +88,7 @@ namespace CommonBaseRole.Controllers.BaseRole
                 pm.TableName = "SystemRole";
                 pm.KeyField = "RoleID";
                 List<SystemRole> list = await SystemRoleService.GetEntityPage(pm);
-                
+
                 var getval = new
                 {
                     success = true,
@@ -131,6 +134,56 @@ namespace CommonBaseRole.Controllers.BaseRole
             catch (Exception ex)
             {
                 json = GetErrorJSONP(ex.Message);
+            }
+            return Ok(json);
+        }
+
+        [HttpPost("Login")]
+        public async Task<object> GetSystemUser(string userName, string password)
+        {
+            JsonpResult<object> json = GetErrorJSONP("初始化中...");
+            try
+            {
+                if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(password))
+                {
+                    json = GetErrorJSONP("必要参数不能为空!");
+                    return BadRequest(json);
+                }
+                PageModel pm = new PageModel() { CurrentPage = 1, PageSize = 100 };
+                pm.Condition.Add(new SearchCondition()
+                {
+                    ConditionField = "su.[UserLoginName]",
+                    SearchType = SearchType.Equal,
+                    ConditionValue1 = userName,
+                });
+                pm.Condition.Add(new SearchCondition()
+                {
+                    ConditionField = "su.[UserPassword]",
+                    SearchType = SearchType.Equal,
+                    ConditionValue1 = EncryptHelper.MD5Encode(password),
+                });
+                SystemUser user = await SystemUserService.GetSystemUsersRole(pm);
+                if (string.IsNullOrWhiteSpace(user.UserID))
+                {
+                    json = GetErrorJSONP("用户名或密码错误!");
+                    return BadRequest(json);
+                }
+                if (user.Roles == null || user.Roles.Count <= 0)
+                {
+                    json = GetErrorJSONP("该用户无角色，请联系管理员!");
+                    return BadRequest(json);
+                }
+                var getval = new
+                {
+                    success = true,
+                    msg = "登陆成功",
+                };
+                json = new JsonpResult<object>(getval);
+            }
+            catch (Exception ex)
+            {
+                json = GetErrorJSONP(ex.Message);
+                return BadRequest(json);
             }
             return Ok(json);
         }
