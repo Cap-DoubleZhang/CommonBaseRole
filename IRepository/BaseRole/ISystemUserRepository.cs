@@ -15,5 +15,12 @@ namespace IRepository.BaseRole
         /// <param name="pm">查询参数</param>
         /// <returns></returns>
         Task<SystemUser> GetSystemUsersRole(PageModel pm);
+
+        /// <summary>
+        /// 获取所有用户列表（分页）
+        /// </summary>
+        /// <param name="pm">查询参数</param>
+        /// <returns></returns>
+        Task<List<SystemUser>> GetSystemUsers(PageModel pm);
     }
 }

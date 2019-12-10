@@ -71,21 +71,5 @@ namespace Model.DtoModel.BaseRole
         public string CreateTime { get; set; }
         public string LastUpdateTime { get; set; }
         #endregion
-
-        ///// <summary>
-        ///// 角色ID组合
-        ///// </summary>
-        //public string RolesStr { get; set; }
-
-        ///// <summary>
-        ///// 用户对应角色
-        ///// </summary>
-        //[SugarColumn(IsIgnore = true)]
-        //public List<SystemUserRole> UserRoles { get; set; }
-
-        ///// <summary>
-        ///// 拥有角色集合
-        ///// </summary>
-        //public List<SystemRole> Roles { get; set; }
     }
 }

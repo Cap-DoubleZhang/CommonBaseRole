@@ -12,17 +12,17 @@ namespace CommonBaseRole.Controllers
     public class CommonController : ControllerBase
     {
         /// <summary>
-        /// 接口处返回错误信息
+        /// 接口处返回提示信息
         /// </summary>
-        /// <param name="message">错误提示</param>
+        /// <param name="message">提示</param>
+        /// <param name="success">是否成功，默认False</param>
         /// <returns></returns>
         [ApiExplorerSettings(IgnoreApi = true)]
-        public JsonpResult<object> GetErrorJSONP(string message)
+        public JsonpResult<object> GetReturnJSONP(string message, bool success = false)
         {
             var getval = new
             {
-                success = false,
-                code = "0000",
+                success = success,
                 msg = message
             };
 

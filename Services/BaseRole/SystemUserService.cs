@@ -11,11 +11,27 @@ namespace Services.BaseRole
 {
     public class SystemUserService : BaseServices<SystemUser>, ISystemUserService
     {
-        ISystemUserRepository ISystemUserService;
+        ISystemUserRepository SystemUserRepository;
         public SystemUserService(ISystemUserRepository systemUserRepository)
         {
-            this.ISystemUserService = systemUserRepository;
+            this.SystemUserRepository = systemUserRepository;
             //base.baseRepository = systemUserRepository;
+        }
+
+        /// <summary>
+        /// 获取所有用户列表（分页）
+        /// </summary>
+        /// <param name="pm">查询参数</param>
+        /// <returns></returns>
+        public async Task<List<SystemUser>> GetSystemUsers(PageModel pm)
+        {
+            pm.lstOrder.Add(new OrderModel()
+            {
+                FieldName = "su.CreateTime",
+                Order = PMSortOrder.desc,
+            });
+            List<SystemUser> users = await SystemUserRepository.GetSystemUsers(pm);
+            return users;
         }
 
         /// <summary>
@@ -31,8 +47,10 @@ namespace Services.BaseRole
                 FieldName = "sr.CreateTime",
                 Order = PMSortOrder.asc,
             });
-            SystemUser user = await ISystemUserService.GetSystemUsersRole(pm) ?? new SystemUser();
+            SystemUser user = await SystemUserRepository.GetSystemUsersRole(pm) ?? new SystemUser();
             return user;
         }
+
+
     }
 }

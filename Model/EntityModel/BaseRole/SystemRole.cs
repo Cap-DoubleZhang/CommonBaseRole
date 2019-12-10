@@ -50,23 +50,5 @@ namespace Model.EntityModel.BaseRole
         public DateTime LastUpdateTime { get; set; }
         public int LastUpdateBy { get; set; }
         #endregion
-
-        /// <summary>
-        /// 用户ID
-        /// </summary>
-        [SugarColumn(IsIgnore = true)]
-        public int SystemUserID { get; set; }
-
-        /// <summary>
-        /// 用户是否包含该角色
-        /// </summary>
-        [SugarColumn(IsIgnore = true)]
-        public int RoleChecked { get; set; }
-
-        /// <summary>
-        /// 用户对应角色ID
-        /// </summary>
-        [SugarColumn(IsIgnore = true)]
-        public int UserRoleID { get; set; }
     }
 }

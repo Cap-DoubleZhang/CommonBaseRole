@@ -12,6 +12,57 @@ namespace Repository.BaseRole
     public class SystemUserRepository : BaseRepository<SystemUser>, ISystemUserRepository
     {
         /// <summary>
+        /// 获取所有用户列表（分页）
+        /// </summary>
+        /// <param name="pm">查询参数</param>
+        /// <returns></returns>
+        public async Task<List<SystemUser>> GetSystemUsers(PageModel pm)
+        {
+            pm.Condition.Add(new SearchCondition()
+            {
+                ConditionField = "su.[ValidFlag]",
+                SearchType = SearchType.Equal,
+                ConditionValue1 = "1",
+            });
+            //执行存储过程
+            DataTable dt = await ExecStoredProcedure("sp_GetSystemUsers", pm);
+            List<SystemUser> list = new List<SystemUser>();
+            foreach (DataRow item in dt.Rows)
+            {
+                SystemUserInfo userInfo = new SystemUserInfo()
+                {
+                    InfoID = item["InfoID"].ToString(),
+                    UserShowName = item["UserShowName"].ToString(),
+                    HeadPortrait = item["HeadPortrait"].ToString(),
+                    Phone = item["Phone"].ToString(),
+                    EMail = item["EMail"].ToString(),
+                    BirthDate = Convert.IsDBNull(item["BirthDate"]) ? DateTime.MinValue : Convert.ToDateTime(item["BirthDate"]),
+                    IDCard = item["IDCard"].ToString(),
+                    QQ = item["QQ"].ToString(),
+                    WeChat = item["WeChat"].ToString(),
+                };
+
+                SystemUser user = new SystemUser
+                {
+                    UserID = item["UserID"].ToString(),
+                    UserLoginName = item["UserLoginName"].ToString(),
+                    UserPassword = item["UserPassword"].ToString(),
+                    SystemUserLevel = Convert.IsDBNull(item["SystemUserLevel"]) ? 0 : Convert.ToInt32(item["SystemUserLevel"]),
+                    Descripts = item["Descripts"].ToString(),
+                    LoginTimes = Convert.IsDBNull(item["LoginTimes"]) ? 0 : Convert.ToInt32(item["LoginTimes"]),
+                    LastLoginTime = Convert.IsDBNull(item["LastLoginTime"]) ? DateTime.MinValue : Convert.ToDateTime(item["LastLoginTime"]),
+                    LastLoginIP = item["LastLoginIP"].ToString(),
+                    IsUse = Convert.IsDBNull(item["IsUse"]) ? 0 : Convert.ToInt32(item["IsUse"]),
+                    CreateTime = Convert.IsDBNull(item["CreateTime"]) ? DateTime.MinValue : Convert.ToDateTime(item["CreateTime"]),
+                    CreateBy = Convert.IsDBNull(item["CreateBy"]) ? 0 : Convert.ToInt32(item["CreateBy"]),
+                    UserInfo = userInfo,
+                };
+                list.Add(user);
+            }
+            return list;
+        }
+
+        /// <summary>
         /// 获取单个用户登录信息、基础信息、角色信息
         /// </summary>
         /// <param name="pm">查询参数</param>
@@ -24,7 +75,7 @@ namespace Repository.BaseRole
                 SearchType = SearchType.Equal,
                 ConditionValue1 = "1",
             });
-            pm.Condition.Add(new SearchCondition()
+            pm.Condition.Add(new SearchCondition()//角色可用性判断
             {
                 ConditionField = "sr.[IsUse]",
                 SearchType = SearchType.Equal,

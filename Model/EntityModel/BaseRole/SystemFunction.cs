@@ -53,17 +53,5 @@ namespace Model.EntityModel.BaseRole
         public DateTime LastUpdateTime { get; set; }
         public int LastUpdateBy { get; set; }
         #endregion
-
-        ///// <summary>
-        ///// 角色功能项
-        ///// </summary>
-        //[SugarColumn(IsIgnore = true)]
-        //public SystemRoleFunction roleFunction { get; set; }
-
-        /// <summary>
-        /// 角色对应功能项，对应则打钩
-        /// </summary>
-        [SugarColumn(IsIgnore = true)]
-        public int NoChecked { get; set; }
     }
 }
