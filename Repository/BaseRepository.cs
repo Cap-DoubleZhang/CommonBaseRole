@@ -136,6 +136,31 @@ namespace Repository
         }
 
         /// <summary>
+        /// 执行查询特殊的存储过程（链表查询）
+        /// </summary>
+        /// <param name="procName"></param>
+        /// <param name="pm"></param>
+        /// <returns></returns>
+        public async Task<DataTable> ExecStoredProcedureTwo(string procName, Model.PageModel pm)
+        {
+            SugarParameter[] sugarParameters = new SugarParameter[] {
+                new SugarParameter("p_CurrentPage", pm.CurrentPage),
+                new SugarParameter("p_PageSize", pm.PageSize),
+                new SugarParameter("p_Condition", pm.ConditionString),
+                new SugarParameter("p_Order", pm.OrderString),
+                new SugarParameter("p_DataCount", pm.DataCount),
+                new SugarParameter("p_MaxPage", pm.MaxPage),
+                new SugarParameter("p_ExtraCondition",pm.ExtraCondition),
+            };
+            sugarParameters[4].Direction = ParameterDirection.Output;
+            sugarParameters[5].Direction = ParameterDirection.Output;
+            DataTable dt = db.Ado.UseStoredProcedure().GetDataTable(procName, sugarParameters);
+            pm.DataCount = Convert.IsDBNull(sugarParameters[4].Value) ? 0 : Convert.ToInt32(sugarParameters[4].Value);
+            pm.MaxPage = Convert.IsDBNull(sugarParameters[5].Value) ? 0 : Convert.ToInt32(sugarParameters[5].Value);
+            return await Task.Run(() => dt);
+        }
+
+        /// <summary>
         /// 获取单个实体列表（不分页）
         /// </summary>
         /// <returns></returns>

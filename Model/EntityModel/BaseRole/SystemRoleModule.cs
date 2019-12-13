@@ -11,6 +11,11 @@ namespace Model.EntityModel.BaseRole
     [SugarTable("SystemRoleModule")]
     public class SystemRoleModule
     {
+        public SystemRoleModule()
+        {
+            ValidFlag = 1;
+            LastUpdateTime = DateTime.Now;
+        }
         /// <summary>
         /// 主键ID
         /// </summary>
@@ -24,6 +29,10 @@ namespace Model.EntityModel.BaseRole
         /// 菜单ID 
         /// </summary>
         public int ModuleID { get; set; }
+        /// <summary>
+        /// 是否可用
+        /// </summary>
+        public int ValidFlag { get; set; }
 
         #region 公共属性
         public DateTime CreateTime { get; set; }
@@ -31,17 +40,5 @@ namespace Model.EntityModel.BaseRole
         public DateTime LastUpdateTime { get; set; }
         public int LastUpdateBy { get; set; }
         #endregion
-
-        /// <summary>
-        /// 对应角色信息
-        /// </summary>
-        [SugarColumn(IsIgnore = true)]
-        public SystemRole Role { get; set; }
-
-        /// <summary>
-        /// 对应菜单信息
-        /// </summary>
-        [SugarColumn(IsIgnore = true)]
-        public AdminModule AdminModule { get; set; }
     }
 }

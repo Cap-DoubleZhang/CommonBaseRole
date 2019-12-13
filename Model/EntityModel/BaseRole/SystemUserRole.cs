@@ -13,6 +13,7 @@ namespace Model.EntityModel.BaseRole
     {
         public SystemUserRole()
         {
+            ValidFlag = 1;
             LastUpdateTime = DateTime.Now;
         }
         /// <summary>
@@ -28,6 +29,10 @@ namespace Model.EntityModel.BaseRole
         /// 角色ID
         /// </summary>
         public int RoleID { get; set; }
+        /// <summary>
+        /// 是否可用
+        /// </summary>
+        public int ValidFlag { get; set; }
 
         #region 公共属性
         public DateTime CreateTime { get; set; }

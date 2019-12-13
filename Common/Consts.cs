@@ -21,5 +21,25 @@
         /// 密码截取位数
         /// </summary>
         public static string SubString = CommonHelper.app(new string[] { "AppSetting", "PasswordSetting", "SubString" });
+
+        /// <summary>
+        /// JWT秘钥
+        /// </summary>
+        public static string SecurityKey = CommonHelper.app(new string[] { "AppSetting", "JwtSetting", "SecurityKey" });
+
+        /// <summary>
+        /// JWT发送者
+        /// </summary>
+        public static string Issuer = CommonHelper.app(new string[] { "AppSetting", "JwtSetting", "issuer" });
+
+        /// <summary>
+        /// JWT接收者
+        /// </summary>
+        public static string Audience = CommonHelper.app(new string[] { "AppSetting", "JwtSetting", "audience" });
+
+        /// <summary>
+        /// JWT过期时间（DAY）
+        /// </summary>
+        public static string Exp = CommonHelper.app(new string[] { "AppSetting", "JwtSetting", "exp" });
     }
 }

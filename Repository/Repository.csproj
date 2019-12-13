@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="BaseRole\SystemFunctionRepository.cs" />
+    <Compile Remove="BaseRole\SystemRoleFunctionRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="sqlSugarCore" Version="5.0.0.10" />
   </ItemGroup>
 

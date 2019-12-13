@@ -11,6 +11,12 @@ namespace CommonBaseRole.Controllers
     [ApiController]
     public class CommonController : ControllerBase
     {
+        //public string IPAddress;
+        //public CommonController()
+        //{
+        //    IPAddress = HttpContext.Connection.RemoteIpAddress.ToString();
+        //}
+
         /// <summary>
         /// 接口处返回提示信息
         /// </summary>

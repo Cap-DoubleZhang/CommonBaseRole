@@ -10,6 +10,11 @@ using IServices.BaseRole;
 using Microsoft.Extensions.Logging;
 using Model.DtoModel.BaseRole;
 using Common;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CommonBaseRole.Controllers.BaseRole
 {
@@ -20,17 +25,14 @@ namespace CommonBaseRole.Controllers.BaseRole
         private IAdminModuleService AdminModuleService;
         private ISystemRoleService SystemRoleService;
         private ISystemUserService SystemUserService;
-        private ISystemFunctionService SystemFunctionService;
         private ILogger<SystemController> _logger;
 
         public SystemController(ILogger<SystemController> logger, IAdminModuleService adminModuleService
-            , ISystemRoleService systemRoleService, ISystemUserService systemUserService
-            , ISystemFunctionService systemFunctionService)
+            , ISystemRoleService systemRoleService, ISystemUserService systemUserService)
         {
             this.AdminModuleService = adminModuleService;
             this.SystemRoleService = systemRoleService;
             this.SystemUserService = systemUserService;
-            this.SystemFunctionService = systemFunctionService;
             this._logger = logger;
         }
 
@@ -275,15 +277,24 @@ namespace CommonBaseRole.Controllers.BaseRole
                     json = GetReturnJSONP("用户名或密码错误!");
                     return BadRequest(json);
                 }
-                if (user.Roles == null || user.Roles.Count <= 0)
+                if (user.IsUse == 0)
                 {
-                    json = GetReturnJSONP("该用户无角色，请联系管理员!");
+                    json = GetReturnJSONP("该账户被禁用，请联系管理员!");
                     return BadRequest(json);
                 }
+                if (user.Roles == null || user.Roles.Count <= 0)
+                {
+                    json = GetReturnJSONP("该账户无角色，请联系管理员!");
+                    return BadRequest(json);
+                }
+
+                var JwtToken = JwtHelper.JwtTokenHelper.GetJwtToken(user);
+
                 var getval = new
                 {
                     success = true,
-                    msg = "登陆成功",
+                    msg = "登录成功",
+                    token = JwtToken,
                 };
                 json = new JsonpResult<object>(getval);
             }
@@ -409,128 +420,6 @@ namespace CommonBaseRole.Controllers.BaseRole
                     item = user,
                 };
                 json = new JsonpResult<object>(getval);
-            }
-            catch (Exception ex)
-            {
-                json = GetReturnJSONP(ex.Message);
-                return BadRequest(json);
-            }
-            return Ok(json);
-        }
-        #endregion
-        #endregion
-
-        #region 功能项操作
-        #region 获取功能项列表（分页）
-        /// <summary>
-        /// 获取功能项列表（分页）
-        /// </summary>
-        /// <param name="p">当前页</param>
-        /// <param name="s">页容量</param>
-        /// <param name="keyword">关键词</param>
-        /// <returns></returns>
-        [HttpGet("Functions")]
-        public async Task<object> GetSystemFunctions(int p = 1, int s = 1, string keyword = "")
-        {
-            JsonpResult<object> json = GetReturnJSONP("初始化中...");
-            try
-            {
-                PageModel pm = new PageModel { CurrentPage = p, PageSize = s };
-                if (string.IsNullOrWhiteSpace(keyword))
-                {
-                    pm.OrCondition.Add(new SearchCondition()
-                    {
-                        ConditionField = "FunctionCode",
-                        SearchType = SearchType.Like,
-                        ConditionValue1 = keyword,
-                    });
-                    pm.OrCondition.Add(new SearchCondition()
-                    {
-                        ConditionField = "FunctionName",
-                        SearchType = SearchType.Like,
-                        ConditionValue1 = keyword,
-                    });
-                    pm.OrCondition.Add(new SearchCondition()
-                    {
-                        ConditionField = "FunctionPath",
-                        SearchType = SearchType.Like,
-                        ConditionValue1 = keyword,
-                    });
-                    pm.OrCondition.Add(new SearchCondition()
-                    {
-                        ConditionField = "Describe",
-                        SearchType = SearchType.Like,
-                        ConditionValue1 = keyword,
-                    });
-                }
-                List<SystemFunction> list = await SystemFunctionService.GetEntityPage(pm);
-                var getval = new
-                {
-                    success = true,
-                    code = "0000",
-                    data = list,
-                    dataCount = pm.DataCount,
-                    maxPage = pm.MaxPage,
-                };
-                json = new JsonpResult<object>(getval);
-            }
-            catch (Exception ex)
-            {
-                json = GetReturnJSONP(ex.Message);
-                return BadRequest(json);
-            }
-            return Ok(json);
-        }
-        #endregion
-
-        #region 获取功能项详情
-        /// <summary>
-        /// 获取功能项详情
-        /// </summary>
-        /// <param name="Id">主键ID</param>
-        /// <returns></returns>
-        [HttpGet("Functions/{Id}")]
-        public async Task<object> GetSystemFunctionInfo(int Id = 0)
-        {
-            JsonpResult<object> json = GetReturnJSONP("初始化中...");
-            try
-            {
-                SystemFunction function = await SystemFunctionService.TEntityInfo(Id.ToString());
-                var getval = new
-                {
-                    success = true,
-                    item = function,
-                };
-                json = new JsonpResult<object>(getval);
-            }
-            catch (Exception ex)
-            {
-                json = GetReturnJSONP(ex.Message);
-                return BadRequest(json);
-            }
-            return Ok(json);
-        }
-        #endregion
-
-        #region 保存、添加、逻辑删除功能项
-        /// <summary>
-        /// 保存、添加、逻辑删除功能项
-        /// </summary>
-        /// <param name="systemFunction"></param>
-        /// <returns></returns>
-        [HttpPost("Functions/{systemFunction.FunctionID}")]
-        public async Task<object> SaveFunctionInfo(SystemFunction systemFunction)
-        {
-            JsonpResult<object> json = GetReturnJSONP("初始化中...");
-            try
-            {
-                if (string.IsNullOrWhiteSpace(systemFunction.FunctionName) || string.IsNullOrWhiteSpace(systemFunction.FunctionPath) || systemFunction.ModuleID <= 0)
-                {
-                    json = GetReturnJSONP("必要参数不能为空!");
-                    return BadRequest(json);
-                }
-                ReturnModel rm = await SystemFunctionService.SaveEntityInfo(systemFunction);
-                json = GetReturnJSONP(rm.msg, rm.BooleanResult);
             }
             catch (Exception ex)
             {

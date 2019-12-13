@@ -10,6 +10,20 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:CommonBaseRole.Controllers.BaseRole.SystemController.GetMenuInfo(System.Int32)">
+            <summary>
+            获取后台菜单详情
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CommonBaseRole.Controllers.BaseRole.SystemController.SaveAdminModule(Model.EntityModel.BaseRole.AdminModule)">
+            <summary>
+            保存、添加、逻辑删除菜单信息
+            </summary>
+            <param name="adminModule"></param>
+            <returns></returns>
+        </member>
         <member name="M:CommonBaseRole.Controllers.BaseRole.SystemController.GetRoleList(System.Int32,System.Int32,System.String)">
             <summary>
             获取角色列表（分页）
@@ -26,6 +40,13 @@
             <param name="Id"></param>
             <returns></returns>
         </member>
+        <member name="M:CommonBaseRole.Controllers.BaseRole.SystemController.SaveRoleInfo(Model.EntityModel.BaseRole.SystemRole)">
+            <summary>
+            保存、新增、逻辑删除角色信息
+            </summary>
+            <param name="systemRole"></param>
+            <returns></returns>
+        </member>
         <member name="M:CommonBaseRole.Controllers.BaseRole.SystemController.GetSystemUser(System.String,System.String)">
             <summary>
             用户登录
@@ -34,11 +55,28 @@
             <param name="password">密码</param>
             <returns></returns>
         </member>
-        <member name="M:CommonBaseRole.Controllers.CommonController.GetErrorJSONP(System.String)">
+        <member name="M:CommonBaseRole.Controllers.BaseRole.SystemController.GetSystemUsers(System.Int32,System.Int32,System.String)">
             <summary>
-            接口处返回错误信息
+            获取所有用户列表（分页）
             </summary>
-            <param name="message">错误提示</param>
+            <param name="p">当前页数</param>
+            <param name="s">页容量</param>
+            <param name="keyword">关键词</param>
+            <returns></returns>
+        </member>
+        <member name="M:CommonBaseRole.Controllers.BaseRole.SystemController.GetUserInfo(System.String)">
+            <summary>
+            获取用户详情
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CommonBaseRole.Controllers.CommonController.GetReturnJSONP(System.String,System.Boolean)">
+            <summary>
+            接口处返回提示信息
+            </summary>
+            <param name="message">提示</param>
+            <param name="success">是否成功，默认False</param>
             <returns></returns>
         </member>
         <member name="M:CommonBaseRole.Controllers.CommonController.JsonpResult`1.#ctor(`0)">
@@ -46,6 +84,13 @@
             前端返回数据类型
             </summary>
             <param name="obj"></param>
+        </member>
+        <member name="M:CommonBaseRole.JwtHelper.JwtTokenHelper.GetJwtToken(Model.EntityModel.BaseRole.SystemUser)">
+            <summary>
+            获取JwtToken字符串
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
         </member>
         <member name="M:CommonBaseRole.Startup.ConfigureContainer(Autofac.ContainerBuilder)">
             <summary>

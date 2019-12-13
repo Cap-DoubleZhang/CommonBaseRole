@@ -16,6 +16,9 @@ using System.Reflection;
 using Autofac.Extras.DynamicProxy;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace CommonBaseRole
 {
@@ -32,6 +35,26 @@ namespace CommonBaseRole
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,//是否验证秘钥
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Consts.SecurityKey)),
+
+                        ValidateIssuer = true,//是否验证发送者
+                        ValidIssuer = Consts.Issuer,
+
+                        ValidateAudience = true,//是否验证接收者
+                        ValidAudience = Consts.Audience,
+
+                        ValidateLifetime = true,//是否验证过期时间
+                        ClockSkew = TimeSpan.Zero,
+
+                    };
+                });
 
             #region Swagger
             var basePath = Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment.ApplicationBasePath;
@@ -95,7 +118,7 @@ namespace CommonBaseRole
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint($"/swagger/v1/swagger.json", ".NET Core 3.0 V1");
+                    c.SwaggerEndpoint($"/swagger/v1/swagger.json", ".NET Core 3.1 V1");
                 });
                 #endregion
             }
@@ -104,6 +127,8 @@ namespace CommonBaseRole
             app.UseStatusCodePages();//把错误码返回到前台
 
             app.UseRouting();
+
+            app.UseAuthentication();//开启认证中间件
 
             app.UseAuthorization();
 
