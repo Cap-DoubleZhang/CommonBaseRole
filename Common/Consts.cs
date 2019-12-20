@@ -1,4 +1,6 @@
-﻿namespace Common
+﻿using System;
+
+namespace Common
 {
     public class Consts
     {
@@ -41,5 +43,20 @@
         /// JWT过期时间（DAY）
         /// </summary>
         public static string Exp = CommonHelper.app(new string[] { "AppSetting", "JwtSetting", "exp" });
+
+        /// <summary>
+        /// Redis IP地址及端口号
+        /// </summary>
+        public static string RedisIPAddress = CommonHelper.app(new string[] { "AppSetting", "RedisSetting", "IPAddress" });
+
+        /// <summary>
+        /// Redis 密码
+        /// </summary>
+        public static string RedisPassword = CommonHelper.app(new string[] { "AppSetting", "RedisSetting", "Password" });
+
+        /// <summary>
+        /// Redis 缓存随机小时
+        /// </summary>
+        public static int RedisExpTime = new Random().Next(Convert.ToInt32(CommonHelper.app(new string[] { "AppSetting", "RedisSetting", "StartTime" })), Convert.ToInt32(CommonHelper.app(new string[] { "AppSetting", "RedisSetting", "EndTime" })));
     }
 }

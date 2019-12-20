@@ -136,7 +136,7 @@ namespace Repository
         }
 
         /// <summary>
-        /// 执行查询特殊的存储过程（链表查询）
+        /// 执行查询具有特殊条件的存储过程（链表查询）
         /// </summary>
         /// <param name="procName"></param>
         /// <param name="pm"></param>

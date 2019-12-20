@@ -64,6 +64,23 @@ namespace Model.EntityModel.BaseRole
         public int IsUse { get; set; }
 
         /// <summary>
+        /// 是否是按钮（0：否，1：是）
+        /// </summary>
+        public int IsButton { get; set; }
+
+        /// <summary>
+        /// 子菜单
+        /// </summary>
+        [SugarColumn(IsIgnore = true)]
+        public List<AdminModule> ChildrenModules { get; set; }
+
+        /// <summary>
+        /// 子按钮
+        /// </summary>
+        [SugarColumn(IsIgnore = true)]
+        public List<AdminModule> ChildrenButtons { get; set; }
+
+        /// <summary>
         /// 是否可用
         /// </summary>
         public int ValidFlag { get; set; }
@@ -74,17 +91,5 @@ namespace Model.EntityModel.BaseRole
         public DateTime LastUpdateTime { get; set; }
         public int LastUpdateBy { get; set; }
         #endregion
-
-        ///// <summary>
-        ///// 角色
-        ///// </summary>
-        //[SugarColumn(IsIgnore = true)]
-        //public SystemRoleModule roleModule { get; set; }
-
-        /// <summary>
-        /// 角色是否拥有该权限
-        /// </summary>
-        [SugarColumn(IsIgnore = true)]
-        public int NoChecked { get; set; }
     }
 }

@@ -55,6 +55,16 @@ namespace Model.DtoModel.BaseRole
         public int SortIndex { get; set; }
 
         /// <summary>
+        /// 子菜单
+        /// </summary>
+        public List<AdminModuleDto> ChildrenModules { get; set; }
+
+        /// <summary>
+        /// 子按钮
+        /// </summary>
+        public List<AdminModuleDto> ChildrenButtons { get; set; }
+
+        /// <summary>
         /// 是否禁用
         /// </summary>
         public int IsUse { get; set; }
@@ -63,16 +73,5 @@ namespace Model.DtoModel.BaseRole
         public DateTime CreateTime { get; set; }
         public DateTime LastUpdateTime { get; set; }
         #endregion
-
-        ///// <summary>
-        ///// 角色
-        ///// </summary>
-        //[SugarColumn(IsIgnore = true)]
-        //public SystemRoleModule roleModule { get; set; }
-
-        /// <summary>
-        /// 角色是否拥有该权限
-        /// </summary>
-        public int NoChecked { get; set; }
     }
 }

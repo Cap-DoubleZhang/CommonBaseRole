@@ -15,6 +15,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using Common.RedisHelper;
 
 namespace CommonBaseRole.Controllers.BaseRole
 {
@@ -25,14 +26,16 @@ namespace CommonBaseRole.Controllers.BaseRole
         private IAdminModuleService AdminModuleService;
         private ISystemRoleService SystemRoleService;
         private ISystemUserService SystemUserService;
+        private IRedisCacheManager RedisCacheManager;
         private ILogger<SystemController> _logger;
 
         public SystemController(ILogger<SystemController> logger, IAdminModuleService adminModuleService
-            , ISystemRoleService systemRoleService, ISystemUserService systemUserService)
+            , ISystemRoleService systemRoleService, ISystemUserService systemUserService, IRedisCacheManager redisCacheManager)
         {
             this.AdminModuleService = adminModuleService;
             this.SystemRoleService = systemRoleService;
             this.SystemUserService = systemUserService;
+            this.RedisCacheManager = redisCacheManager;
             this._logger = logger;
         }
 
@@ -43,22 +46,34 @@ namespace CommonBaseRole.Controllers.BaseRole
         /// </summary>
         /// <returns></returns>
         [HttpGet("Menus")]
-        public async Task<object> GetMenuList()
+        public async Task<IActionResult> GetMenuList()
         {
             JsonpResult<object> json = GetReturnJSONP("初始化中...");
             try
             {
-                List<AdminModule> list = await AdminModuleService.GetEntity();
+                List<AdminModule> listOrder = new List<AdminModule>();
+                if (RedisCacheManager.Get<object>("Redis.Menus") != null)
+                {
+                    listOrder = RedisCacheManager.Get<List<AdminModule>>("Redis.Menus");
+                }
+                else
+                {
+                    List<AdminModule> list = await AdminModuleService.GetAdminModules();
+                    listOrder = await AdminModuleService.AdminModuleOrder(list);
+                    RedisCacheManager.Set("Redis.Menus", listOrder, TimeSpan.FromHours(Consts.RedisExpTime));
+                }
+
                 var getval = new
                 {
                     success = true,
-                    data = list,
+                    data = listOrder,
                 };
                 json = new JsonpResult<object>(getval);
             }
             catch (Exception ex)
             {
                 json = GetReturnJSONP(ex.Message);
+                return BadRequest(json);
             }
             return Ok(json);
         }

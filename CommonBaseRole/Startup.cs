@@ -19,6 +19,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Common.RedisHelper;
 
 namespace CommonBaseRole
 {
@@ -35,6 +36,9 @@ namespace CommonBaseRole
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            //注入 Redis 缓存
+            services.AddScoped<IRedisCacheManager, RedisCacheManager>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -87,6 +91,7 @@ namespace CommonBaseRole
             //左边的是实现类，右边的AS是接口
             var basePath = Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment.ApplicationBasePath;
             //builder.RegisterType<WebSiteServices>().As<IWebSiteServices>();
+
 
             //注册要通过反射创建的组件
             var serviceDllFile = Path.Combine(basePath, "Services.dll");
