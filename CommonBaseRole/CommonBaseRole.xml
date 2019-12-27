@@ -10,6 +10,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:CommonBaseRole.Controllers.BaseRole.SystemController.GetRoleModule(System.String)">
+            <summary>
+            角色权限
+            </summary>
+            <param name="roleId"></param>
+            <returns></returns>
+        </member>
         <member name="M:CommonBaseRole.Controllers.BaseRole.SystemController.GetMenuInfo(System.Int32)">
             <summary>
             获取后台菜单详情

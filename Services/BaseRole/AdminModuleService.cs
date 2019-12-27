@@ -24,33 +24,37 @@ namespace Services.BaseRole
             base.baseRepository = adminModuleRepository;
         }
 
-
-        public async Task<List<AdminModule>> GetAdminModules()
-        {
-            List<AdminModule> list = await _repository.GetEntity();
-            return list;
-        }
-
+        #region 菜单--树形菜单
+        /// <summary>
+        /// 菜单权限进行排序
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
         public async Task<List<AdminModule>> AdminModuleOrder(List<AdminModule> list)
         {
             List<AdminModule> listDto = list.Where(a => a.ParentModuleID == 0).ToList();
             foreach (AdminModule item in listDto)
             {
-                List<AdminModule> childrenList = await GetChildrenAdminModuleAsync(item.ModuleID);
+                List<AdminModule> childrenList = await GetChildrenAdminModuleAsync(item.ModuleID, list);
                 item.ChildrenButtons = childrenList.Where(a => a.IsButton == 1).ToList();
                 item.ChildrenModules = childrenList.Where(a => a.IsButton == 0).ToList();
             }
             return listDto;
         }
 
-        public async Task<List<AdminModule>> GetChildrenAdminModuleAsync(int pid)
+        /// <summary>
+        /// 递归将子菜单添加到父级菜单
+        /// </summary>
+        /// <param name="pid"></param>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public async Task<List<AdminModule>> GetChildrenAdminModuleAsync(int pid, List<AdminModule> list)
         {
             List<AdminModule> listOrder = new List<AdminModule>();
-            List<AdminModule> list = await GetAdminModules();//获取全部菜单列表，回头使用Redis中的缓存
             List<AdminModule> listDto = list.Where(a => a.ParentModuleID == pid).ToList();
             foreach (AdminModule item in listDto)
             {
-                List<AdminModule> childrenList = await GetChildrenAdminModuleAsync(item.ModuleID);
+                List<AdminModule> childrenList = await GetChildrenAdminModuleAsync(item.ModuleID, list);
                 if (childrenList.Count() > 0)
                 {
                     item.ChildrenButtons = childrenList.Where(a => a.IsButton == 1).ToList();
@@ -59,6 +63,23 @@ namespace Services.BaseRole
                 listOrder.Add(item);
             }
             return listOrder;
+        }
+        #endregion
+
+        /// <summary>
+        /// 获取角色权限菜单
+        /// </summary>
+        /// <param name="pm"></param>
+        /// <returns></returns>
+        public async Task<List<AdminModule>> GetRoleModules(PageModel pm)
+        {
+            pm.lstOrder.Add(new OrderModel()
+            {
+                FieldName = "am.[SortIndex]",
+                Order = PMSortOrder.asc,
+            });
+            List<AdminModule> list = await _repository.GetRoleModules(pm);
+            return list;
         }
     }
 }

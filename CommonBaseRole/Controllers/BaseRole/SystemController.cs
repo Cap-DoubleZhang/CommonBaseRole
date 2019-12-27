@@ -58,9 +58,61 @@ namespace CommonBaseRole.Controllers.BaseRole
                 }
                 else
                 {
-                    List<AdminModule> list = await AdminModuleService.GetAdminModules();
+                    List<AdminModule> list = await AdminModuleService.GetEntity();
                     listOrder = await AdminModuleService.AdminModuleOrder(list);
                     RedisCacheManager.Set("Redis.Menus", listOrder, TimeSpan.FromHours(Consts.RedisExpTime));
+                }
+
+                var getval = new
+                {
+                    success = true,
+                    data = listOrder,
+                };
+                json = new JsonpResult<object>(getval);
+            }
+            catch (Exception ex)
+            {
+                json = GetReturnJSONP(ex.Message);
+                return BadRequest(json);
+            }
+            return Ok(json);
+        }
+        #endregion
+
+        #region 根据角色ID获取对应权限（角色ID格式：1,2）
+        /// <summary>
+        /// 角色权限
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        [HttpGet("RoleModules/{roleId}")]
+        public async Task<IActionResult> GetRoleModule(string roleId = "")
+        {
+            JsonpResult<object> json = GetReturnJSONP("初始化中...");
+            try
+            {
+                if (string.IsNullOrWhiteSpace(roleId))
+                {
+                    json = GetReturnJSONP("必要参数传入错误!");
+                    return BadRequest(json);
+                }
+                List<AdminModule> listOrder = new List<AdminModule>();
+                if (RedisCacheManager.Get<object>("Redis.RoleModules") != null)
+                {
+                    listOrder = RedisCacheManager.Get<List<AdminModule>>("Redis.RoleModules");
+                }
+                else
+                {
+                    PageModel pm = new PageModel() { CurrentPage = 1, PageSize = 1000 };
+                    pm.Condition.Add(new SearchCondition()
+                    {
+                        ConditionField = "sr.[RoleID]",
+                        SearchType = SearchType.In,
+                        ConditionValue1 = roleId,
+                    });
+                    List<AdminModule> list = await AdminModuleService.GetRoleModules(pm);
+                    listOrder = await AdminModuleService.AdminModuleOrder(list);
+                    RedisCacheManager.Set("Redis.RoleModules", listOrder, TimeSpan.FromHours(Consts.RedisExpTime));
                 }
 
                 var getval = new
