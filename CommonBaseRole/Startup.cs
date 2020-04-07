@@ -118,15 +118,15 @@ namespace CommonBaseRole
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
-                #region Swagger
-                app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint($"/swagger/v1/swagger.json", ".NET Core 3.1 V1");
-                });
-                #endregion
             }
+
+            #region Swagger
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint($"/swagger/v1/swagger.json", ".NET Core 3.1 V1");
+            });
+            #endregion
 
 
             app.UseStatusCodePages();//把错误码返回到前台
