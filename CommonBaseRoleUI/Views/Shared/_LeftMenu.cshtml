@@ -1,0 +1,32 @@
+﻿@using Model.EntityModel.BaseRole
+@model List<AdminModule>
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- /.search form -->
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu">
+            <li class="header"> Header </li>
+            @foreach (var item in Model)
+            {
+                if (item.ParentModuleID == 0)
+                {
+                    <li class="treeview">
+                        <a href="#"><i class="@item.MenuIcon"></i><span>@item.ModuleName</span><i class="fa fa-angle-left pull-right"> </i></a>
+                        <ul class="treeview-menu">
+                            @foreach (var childrenItem in item.ChildrenModules)
+                            {
+                                <li> <a style="padding-left:20px" class="nav-link" onclick="addTabs({id:'@childrenItem.ModuleID',title: '@childrenItem.ModuleName',close: true,url: '@childrenItem.MenuPath',urlType: 'relative'});"><i class="@childrenItem.MenuIcon"></i>@childrenItem.ModuleName</a> </li>
+                            }
+                        </ul>
+                    </li>
+                }
+                else
+                {
+                    <li> <a style="padding-left:20px" class="nav-link" onclick="addTabs({id:'@item.ModuleID',title: '@item.MenuTitle',close: true,url: '@item.MenuPath',urlType: 'relative'});"><i class="@item.MenuIcon"></i><span>@item.ModuleName</span> </a> </li>
+                }
+            }
+        </ul>
+    </section>
+</aside>

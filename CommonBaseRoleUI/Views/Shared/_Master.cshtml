@@ -1,0 +1,104 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>CommonBaseRole</title>
+    <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/AdminLTEScript/dist/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/AdminLTEScript/dist/css/ionicons.min.css" />
+    <link rel="stylesheet" href="~/plugins/loading/load.css" />
+    <link rel="stylesheet" href="~/plugins/layer/2.1/skin/layer.css" />
+    <link rel="stylesheet" href="~/plugins/iCheck/all.css" />
+    <link rel="stylesheet" href="~/plugins/select2/select2.min.css" />
+    <link rel="stylesheet" href="~/AdminLTEScript/dist/css/AdminLTE.min.css" />
+    <link rel="stylesheet" href="~/AdminLTEScript/dist/css/skins/all-skins.min.css" />
+
+    <link rel="stylesheet" href="~/Css/comm.css" />
+    <style type="text/css">
+        html {
+            /*overflow: hidden;*/
+        }
+
+        body {
+            background-color: #ecf0f5;
+        }
+
+        .page_tab_close {
+            margin-left: 10px;
+        }
+
+        .page-tabs-content a {
+            padding-left: 10px;
+        }
+    </style>
+    <script type="text/javascript">
+        //分页参数
+        var PageModel = {
+            Data: { CurrentPage: 1, PageSize: 15, DataCount: 0, MaxPage: 0, PageEventCallBack: undefined }
+        };
+        var pm = PageModel.Data;
+    </script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+    <script src="~/plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="~/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/plugins/fastclick/fastclick.min.js"></script>
+    <script src="~/AdminLTEScript/dist/js/demo.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+    <script src="~/Scripts/master.js"></script>
+    <script src="~/plugins/loading/load-min.js"></script>
+    <script src="~/plugins/message/message.js"></script>
+    <script src="~/plugins/layer/2.1/layer.js"></script>
+    <script src="~/plugins/laypage/1.2/laypage.js"></script>
+    <script src="~/plugins/datapager/extendPagination.js"></script>
+    <script src="~/plugins/iCheck/icheck.min.js"></script>
+    <script src="~/plugins/select2/select2.full.min.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+
+            var token = localStorage.getItem("token");
+            $.ajaxSetup({
+                dataType: "json",
+                cache: false,
+                headers: {
+                    "auth": token
+                },
+                xhrFields: {
+                    withCredentials: true
+                },
+                beforeSend: function (xhr, request) {
+
+                },
+                complete: function (xhr) {
+                    //token过期，则跳转到登录页面
+                    if (xhr.responseJSON.code == 401) {
+                        parent.location.href = baseURL + 'login.html';
+                    }
+                }
+            });
+
+            $('body').on("click", ".allCheckbox", function () {
+                $(".itemCheckbox").attr("checked", $(this).prop());
+            });
+
+            $('body').on("click", ".itemCheckbox", function () {
+                $(".allCheckbox").attr("checked", $(".itemCheckbox").length == $(".itemCheckbox:checked").length ? true : false);
+            });
+        });
+
+
+    </script>
+
+    @RenderBody()
+</body>
+</html>

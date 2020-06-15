@@ -1,0 +1,43 @@
+﻿body {
+    background-color: white;
+}
+
+.permission-list {
+    margin-bottom: 10px;
+    border: 1px solid #ecf0f5;
+}
+
+    .permission-list > dt {
+        height: 33px;
+        background-color: #ecf0f5;
+        vertical-align: middle;
+        line-height: 33px;
+        padding-left: 10px;
+    }
+
+    .permission-list > dd {
+        padding-left: 20px;
+    }
+
+        .permission-list > dd > dl {
+            margin-bottom: 0px;
+        }
+
+            .permission-list > dd > dl > dt {
+                height: 33px;
+                background-color: #ecf0f5;
+                vertical-align: middle;
+                line-height: 33px;
+                padding-left: 10px;
+            }
+
+            .permission-list > dd > dl > dd {
+                padding-left: 25px;
+            }
+
+                .permission-list > dd > dl > dd > label {
+                    margin-right: 20px;
+                    height: 33px;
+                    line-height: 33px;
+                    font-weight: 500;
+                }

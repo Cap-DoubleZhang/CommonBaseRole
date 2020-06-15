@@ -48,7 +48,7 @@ namespace CommonBaseRole.Controllers.BaseRole
         [HttpGet("Menus")]
         public async Task<IActionResult> GetMenuList()
         {
-            JsonpResult<object> json = GetReturnJSONP("初始化中...");
+            string json = GetReturnJSONP("初始化中...");
             try
             {
                 List<AdminModule> listOrder = new List<AdminModule>();
@@ -63,12 +63,7 @@ namespace CommonBaseRole.Controllers.BaseRole
                     RedisCacheManager.Set("Redis.Menus", listOrder, TimeSpan.FromHours(Consts.RedisExpTime));
                 }
 
-                var getval = new
-                {
-                    success = true,
-                    data = listOrder,
-                };
-                json = new JsonpResult<object>(getval);
+                json = GetListSuccessJSONP(listOrder);
             }
             catch (Exception ex)
             {
@@ -88,7 +83,7 @@ namespace CommonBaseRole.Controllers.BaseRole
         [HttpGet("RoleModules/{roleId}")]
         public async Task<IActionResult> GetRoleModule(string roleId = "")
         {
-            JsonpResult<object> json = GetReturnJSONP("初始化中...");
+            string json = GetReturnJSONP("初始化中...");
             try
             {
                 if (string.IsNullOrWhiteSpace(roleId))
@@ -114,13 +109,7 @@ namespace CommonBaseRole.Controllers.BaseRole
                     listOrder = await AdminModuleService.AdminModuleOrder(list);
                     RedisCacheManager.Set("Redis.RoleModules", listOrder, TimeSpan.FromHours(Consts.RedisExpTime));
                 }
-
-                var getval = new
-                {
-                    success = true,
-                    data = listOrder,
-                };
-                json = new JsonpResult<object>(getval);
+                json = GetListSuccessJSONP(listOrder);
             }
             catch (Exception ex)
             {
@@ -140,7 +129,7 @@ namespace CommonBaseRole.Controllers.BaseRole
         [HttpGet("Menus/{Id}")]
         public async Task<object> GetMenuInfo(int Id = 0)
         {
-            JsonpResult<object> json = GetReturnJSONP("初始化中...");
+            string json = GetReturnJSONP("初始化中...");
             try
             {
                 AdminModule adminModule = await AdminModuleService.TEntityInfo(Id.ToString());
@@ -149,7 +138,7 @@ namespace CommonBaseRole.Controllers.BaseRole
                     success = true,
                     item = adminModule,
                 };
-                json = new JsonpResult<object>(getval);
+                json = GetReturnJSONP(adminModule);
             }
             catch (Exception ex)
             {
@@ -169,7 +158,7 @@ namespace CommonBaseRole.Controllers.BaseRole
         [HttpPost("Menus/{adminModule.MuduleID}")]
         public async Task<object> SaveAdminModule(AdminModule adminModule)
         {
-            JsonpResult<object> json = GetReturnJSONP("初始化中...");
+            string json = GetReturnJSONP("初始化中...");
             try
             {
                 if (string.IsNullOrWhiteSpace(adminModule.ModuleName))
@@ -202,7 +191,7 @@ namespace CommonBaseRole.Controllers.BaseRole
         [HttpGet("Roles")]
         public async Task<object> GetRoleList(int p = 1, int s = 1, string keyword = "")
         {
-            JsonpResult<object> json = GetReturnJSONP("初始化中...");
+            string json = GetReturnJSONP("初始化中...");
             try
             {
                 PageModel pm = new PageModel { CurrentPage = p, PageSize = s };
@@ -225,16 +214,16 @@ namespace CommonBaseRole.Controllers.BaseRole
                 pm.KeyField = "RoleID";
                 List<SystemRole> list = await SystemRoleService.GetEntityPage(pm);
 
-                var getval = new
-                {
-                    success = true,
-                    data = list,
-                    pageSize = s,
-                    page = p,
-                    maxPage = pm.MaxPage,
-                    dataCount = pm.DataCount,
-                };
-                json = new JsonpResult<object>(getval);
+                //var getval = new
+                //{
+                //    success = true,
+                //    data = list,
+                //    pageSize = s,
+                //    page = p,
+                //    maxPage = pm.MaxPage,
+                //    dataCount = pm.DataCount,
+                //};
+                json = GetListPageSuccessJSONP(list, s, pm.DataCount);
             }
             catch (Exception ex)
             {
@@ -253,7 +242,7 @@ namespace CommonBaseRole.Controllers.BaseRole
         [HttpGet("Roles/{Id}")]
         public async Task<object> GetSystemRoleInfo(int Id = 0)
         {
-            JsonpResult<object> json = GetReturnJSONP("初始化中...");
+            string json = GetReturnJSONP("初始化中...");
             try
             {
                 if (Id == 0)
@@ -267,7 +256,7 @@ namespace CommonBaseRole.Controllers.BaseRole
                     success = true,
                     item = roleInfo,
                 };
-                json = new JsonpResult<object>(getval);
+                json = GetReturnJSONP(getval);
             }
             catch (Exception ex)
             {
@@ -286,7 +275,7 @@ namespace CommonBaseRole.Controllers.BaseRole
         [HttpPost("Roles/{systemRole.RoleID}")]
         public async Task<object> SaveRoleInfo(SystemRole systemRole)
         {
-            JsonpResult<object> json = GetReturnJSONP("初始化中...");
+            string json = GetReturnJSONP("初始化中...");
             try
             {
                 if (string.IsNullOrWhiteSpace(systemRole.RoleName))
@@ -317,7 +306,7 @@ namespace CommonBaseRole.Controllers.BaseRole
         [HttpPost("/api/Login")]
         public async Task<object> GetSystemUser(string userName, string password)
         {
-            JsonpResult<object> json = GetReturnJSONP("初始化中...");
+            string json = GetReturnJSONP("初始化中...");
             try
             {
                 if (string.IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(password))
@@ -359,11 +348,10 @@ namespace CommonBaseRole.Controllers.BaseRole
 
                 var getval = new
                 {
-                    success = true,
                     msg = "登录成功",
                     token = JwtToken,
                 };
-                json = new JsonpResult<object>(getval);
+                json = GetReturnJSONP(getval);
             }
             catch (Exception ex)
             {
@@ -386,7 +374,7 @@ namespace CommonBaseRole.Controllers.BaseRole
         [HttpGet("Users")]
         public async Task<object> GetSystemUsers(int p = 1, int s = 1, string keyword = "")
         {
-            JsonpResult<object> json = GetReturnJSONP("初始化中...");
+            string json = GetReturnJSONP("初始化中...");
             try
             {
                 PageModel pm = new PageModel { CurrentPage = p, PageSize = s };
@@ -449,7 +437,7 @@ namespace CommonBaseRole.Controllers.BaseRole
                     maxPage = pm.MaxPage,
                     dataCount = pm.DataCount,
                 };
-                json = new JsonpResult<object>(getval);
+                json = GetListPageSuccessJSONP(list, s, pm.DataCount);
             }
             catch (Exception ex)
             {
@@ -469,7 +457,7 @@ namespace CommonBaseRole.Controllers.BaseRole
         [HttpGet("Users/{Id}")]
         public async Task<object> GetUserInfo(string Id = "")
         {
-            JsonpResult<object> json = GetReturnJSONP("初始化中...");
+            string json = GetReturnJSONP("初始化中...");
             try
             {
                 PageModel pm = new PageModel() { CurrentPage = 1, PageSize = 1 };
@@ -481,12 +469,7 @@ namespace CommonBaseRole.Controllers.BaseRole
                 });
                 List<SystemUser> users = await SystemUserService.GetSystemUsers(pm);
                 SystemUser user = users.Count() <= 0 ? new SystemUser() : users.FirstOrDefault();
-                var getval = new
-                {
-                    success = true,
-                    item = user,
-                };
-                json = new JsonpResult<object>(getval);
+                json = GetReturnJSONP(user);
             }
             catch (Exception ex)
             {

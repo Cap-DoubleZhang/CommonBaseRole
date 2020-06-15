@@ -86,6 +86,32 @@
             <param name="success">是否成功，默认False</param>
             <returns></returns>
         </member>
+        <member name="M:CommonBaseRole.Controllers.CommonController.GetReturnJSONP(System.Object)">
+            <summary>
+            返回自定义数据
+            </summary>
+            <param name="message">自定义数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:CommonBaseRole.Controllers.CommonController.GetListPageSuccessJSONP``1(System.Collections.Generic.List{``0},System.Int32,System.Int32,System.Object)">
+            <summary>
+            接口返回数据列表信息(分页)
+            </summary>
+            <typeparam name="Entity">数据实体类型</typeparam>
+            <param name="list">数据实体</param>
+            <param name="s">页容量</param>
+            <param name="count">总条数</param>
+            <param name="extData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CommonBaseRole.Controllers.CommonController.GetListSuccessJSONP``1(System.Collections.Generic.List{``0})">
+            <summary>
+            接口返回数据列表信息
+            </summary>
+            <typeparam name="Entity">数据实体类型</typeparam>
+            <param name="list">数据实体</param>
+            <returns></returns>
+        </member>
         <member name="M:CommonBaseRole.Controllers.CommonController.JsonpResult`1.#ctor(`0)">
             <summary>
             前端返回数据类型

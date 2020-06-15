@@ -1,0 +1,17 @@
+﻿
+/*table 工具条*/
+.box-tools-ex {
+    display: flex;
+    justify-content: flex-end;
+    position: inherit !important;
+}
+
+/*table 工具条 搜素框*/
+.table-search-input {
+    font-size: 16px !important;
+}
+
+/*table 工具条 按钮组*/
+.box-tools-button-ml {
+    margin-left: 10px;
+}
